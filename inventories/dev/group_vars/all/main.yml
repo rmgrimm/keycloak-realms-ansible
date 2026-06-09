@@ -1,0 +1,54 @@
+keycloak_base_url: "https://keycloak.example.com"
+
+broker_realm:
+  realm_name: "dev-broker"
+  display_name: "Broker Realm"
+  internal_idp:
+    # Client for Broker Realm / Identity Provider for
+    display_name: "Team SSO"
+    description: "Client for team realms to broker identity"
+
+    client_id: "team-sso"
+    client_secret: "{{ vault_broker_realm.team_sso.client_secret }}"
+    client_authenticator_type: "client-secret-jwt"
+
+    base_url: ""
+    root_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}/"
+    admin_url: "{{  keycloak_base_url }}/admin/{{ broker_realm.realm_name }}/console/"
+    redirect_uris:
+      - "{{ keycloak_base_url }}/realms/*"
+    web_origins:
+      - "{{ keycloak_base_url }}"
+  external_idp:
+    # Identity Provider configuration to broker requests to
+    alias: "external-idp-oidc"
+    display_name: "External Corporate IdP"
+    base_url: "https://idp.example.com/affwebservices/CASSO/oidc/client-apaas-dev"
+    metadata_descriptor_url: "{{ broker_realm.external_idp.base_url }}/.well-known/openid-configuration"
+    issuer_url: "{{ broker_realm.external_idp.base_url }}"
+    authorization_url: "{{ broker_realm.external_idp.base_url }}/authorize"
+    token_url: "{{ broker_realm.external_idp.base_url }}/token"
+    jwks_url: "{{ broker_realm.external_idp.base_url }}/jwks"
+    token_introspection_url: "{{ broker_realm.external_idp.base_url }}/introspect"
+    user_info_url: "{{ broker_realm.external_idp.base_url }}/userinfo"
+    logout_url: ""
+
+    client_id: "0003cc96-bf62-1a21-a278-63260ad30000"
+    client_secret: "{{ vault_broker_realm.external_idp.client_secret }}"
+    client_auth_method: "client_secret_post"
+    sync_mode: "FORCE"
+    default_scope:
+      - "openid"
+      - "profile"
+      - "example"
+      - "aud-apaas-dev"
+      - "groups"
+    mappers:
+      - claim: "groups"
+        user_attribute: "external_groups"
+        sync_mode: "INHERIT"
+        multivalued: true
+      - claim: "https://example/company"
+        user_attribute: "noInstitution"
+        sync_mode: "INHERIT"
+        multivalued: false

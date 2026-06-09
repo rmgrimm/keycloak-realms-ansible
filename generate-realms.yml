@@ -1,0 +1,30 @@
+---
+- name: Generate Keycloak Realm JSON Files
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    output_dir: "./output"
+
+  tasks:
+    - name: Ensure output directory exists
+      file:
+        path: "{{ output_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Render Broker Realm JSON
+      template:
+        src: "broker-realm.json.j2"
+        dest: "{{ output_dir }}/realm-{{ broker_realm.realm_name }}.json"
+
+    - name: Render Team Realm JSONs
+      loop: "{{ team_realms }}"
+      loop_control:
+        label: "{{ item.realm_name }}"
+      vars:
+        team_realm: "{{ item }}"
+      template:
+        src: "team-realm.json.j2"
+        dest: "{{ output_dir }}/realm-{{ item.realm_name }}.json"

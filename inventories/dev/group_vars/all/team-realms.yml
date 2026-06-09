@@ -1,0 +1,74 @@
+team_realm_defaults:
+  clients:
+    public_client: true
+    auth_type: "client-secret"
+
+    flows:
+      standard: true
+      implicit: false
+      direct_access: false
+      service_account: false
+
+  internal_idp:
+    alias: "broker-realm"
+    display_name: "Broker Realm"
+    metadata_descriptor_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}/.well-known/openid-configuration"
+    issuer_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}/"
+    authorization_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}//authorize"
+    token_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}//token"
+    jwks_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}//jwks"
+    token_introspection_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}//introspect"
+    user_info_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}//userinfo"
+    logout_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}//logout"
+
+    client_id: "{{ broker_realm.internal_idp.client_id }}"
+    client_secret: "{{ broker_realm.internal_idp.client_secret }}"
+    client_auth_method: "client_secret_jwt"
+    sync_mode: "FORCE"
+
+team_realms:
+  - realm_name: "team1"
+    display_name: "Team 1"
+
+    clients:
+      - name: "application1"
+        client_id: "d8503df2-941c-461f-be30-7c550f688bea"
+
+        flows:
+          standard: true
+          implicit: false
+          direct_access: false
+          service_account: false
+
+        scopes_as_array: true
+
+        redirect_uris:
+          - "https://my_app.apps.example.com/*"
+
+        web_origins:
+          - "https://my_app.apps.example.com"
+
+        roles:
+          - name: "admin"
+            scope: "application.admin"
+            scope_default: false
+            external_group: "EXTERNAL_GROUP_application-ADMIN"
+            external_group_sync_mode: "INHERIT"
+          - name: "ecriture"
+            scope: "application.ecriture"
+            scope_default: false
+            external_group: "EXTERNAL_GROUP-application-ECRITURE"
+            external_group_sync_mode: "INHERIT"
+          - name: "lecture"
+            scope: "application.lecture"
+            scope_default: false
+            external_group: "EXTERNAL_GROUP-application-LECTURE"
+            external_group_sync_mode: "INHERIT"
+
+    extra_group_mappers:
+      - external_group: "SR-PaaS-Operateurs-N2"
+        role: "realm-management.realm-admin"
+        sync_mode: "INHERIT"
+
+  - realm_name: "team2"
+    display_name: "Team 2"
