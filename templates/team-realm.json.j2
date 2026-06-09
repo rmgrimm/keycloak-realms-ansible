@@ -89,8 +89,8 @@
     "client": {
       {% if team_realm.clients is defined %}
       {%- for client in team_realm.clients -%}
-      {% if client.roles is defined and client.roles|length > 0 %}
       "{{ client.client_id }}": [
+        {% if client.roles is defined %}
         {% for role in client.roles %}
         {
           "name": "{{ role.name }}",
@@ -102,8 +102,8 @@
         }
         {% if not loop.last %},{% endif %}
         {% endfor %}
+        {% endif %}
       ],
-      {% endif %}
       {% endfor %}
       {% endif %}
       "realm-management": [
