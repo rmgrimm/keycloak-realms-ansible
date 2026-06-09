@@ -1625,7 +1625,7 @@
         "loginHint": "false",
         "clientAuthMethod": "{{ team_realm.internal_idp.client_auth_method | default(team_realm_defaults.internal_idp.client_auth_method) }}",
         "syncMode": "{{ team_realm.internal_idp.sync_mode | default(team_realm_defaults.internal_idp.sync_mode) }}",
-        "clientSecret": "{{ team_realm.internal_idp.client_secret | default(team_realm_defaults.internal_idp.client_secret) }}",
+        "clientSecret": "{{ team_realm.internal_idp.client_secret | default(vault_broker_realm.team_sso.client_secret) }}",
         "requiresShortStateParameter": "false",
         "allowedClockSkew": "0",
         "validateSignature": "true",

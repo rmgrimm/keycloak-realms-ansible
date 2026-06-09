@@ -750,7 +750,7 @@
       "name": "{{  broker_realm.internal_idp.display_name }}",
       "description": "{{ broker_realm.internal_idp.description }}",
       "clientId": "{{ broker_realm.internal_idp.client_id }}",
-      "secret": "{{  broker_realm.internal_idp.client_secret }}",
+      "secret": "{{ vault_broker_realm.team_sso.client_secret }}",
       "rootUrl": "{{ broker_realm.internal_idp.root_url }}",
       "adminUrl": "{{  broker_realm.internal_idp.admin_url }}",
       "baseUrl": "{{ broker_realm.internal_idp.base_url }}",

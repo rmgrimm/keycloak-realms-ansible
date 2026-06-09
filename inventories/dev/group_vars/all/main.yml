@@ -10,7 +10,6 @@ broker_realm:
     description: "Client for team realms to broker identity"
 
     client_id: "team-sso"
-    client_secret: "{{ vault_broker_realm.team_sso.client_secret }}"
     client_authenticator_type: "client-secret-jwt"
 
     base_url: ""
@@ -79,6 +78,5 @@ team_realm_defaults:
     logout_url: "{{ keycloak_base_url }}/realms/{{ broker_realm.realm_name }}/logout"
 
     client_id: "{{ broker_realm.internal_idp.client_id }}"
-    client_secret: "{{ broker_realm.internal_idp.client_secret }}"
     client_auth_method: "client_secret_jwt"
     sync_mode: "FORCE"
